@@ -37,7 +37,7 @@ namespace PedeLogo.Catalogo.Api
                      if (ConfigManager.IsUnHealth())
                      {
                          return HealthCheckResult.Unhealthy();
-                     }
+                     }kuec
                      else
                      {
                          return HealthCheckResult.Healthy();

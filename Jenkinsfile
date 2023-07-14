@@ -31,7 +31,7 @@ pipeline {
                     cloud 'kubernetes'
                 }
             }
-            enviroment {
+            environment {
                 tag_version = "${env.BUILD_ID}"
             }
             steps {             

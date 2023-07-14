@@ -18,7 +18,7 @@ spec:
           command: ["sh", "-c", "until nslookup mongo-service.default.svc.cluster.local; do echo Aguardando o Banco de Dados; sleep 2; done"]   
       containers:
         - name: api
-          image: alebarrionovo/pedelogo-catalogo:{{TAG}}
+          image: alebarrionovo/pedelogo-catalogo:v.1.0.0
           ports:
             - containerPort: 80
               name: http

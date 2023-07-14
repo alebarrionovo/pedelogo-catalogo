@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mongodb-deployment
+  name: {{ .Release.Name }}-mongodb-deployment
 spec:
   selector:
     matchLabels:
-      app: mongodb
+      app: {{ .Release.Name }}-mongodb
   template:
     metadata:
       labels:
-        app: mongodb
+        app: {{ .Release.Name }}-mongodb
     spec:
       containers:
       - name: mongodb
-        image: mongo:4.4.5
+        image: mongo:{{ .Values.mongo.tag }}
         resources:
           requests:            
             memory: "256Mi"
@@ -26,9 +26,11 @@ spec:
         volumeMounts:
           - mountPath: /data/db
             name: mongo-data
-        envFrom:
-            - secretRef:
-                name: mongodb-secret
+        env:
+          - name: MONGO_INITDB_ROOT_USERNAME
+            value: {{ .Values.mongodb.credentials.userName }}
+          - name: MONGO_INITDB_ROOT_PASSWORD
+            value: {{ .Values.mongodb.credentials.userPassword }}
       volumes:
         - name: mongo-data
           hostPath:

@@ -10,7 +10,8 @@ pipeline {
         stage ('Build Image') {
             steps {
                 script {
-                    sh 'sudo docker build -t alebarrionovo/pedelogo-catalogo:${env.BUILD_ID} -f ./src/Pedelogo.Catalogo.Api/Dockerfile .'                   
+                     dockerapp = docker.build("alebarrionovo/pedelogo-catalogo:${env.BUILD_ID}", 
+                        '-f Dockerfile .')                  
                 }
             }
         }

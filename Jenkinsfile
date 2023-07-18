@@ -8,11 +8,11 @@ pipeline {
             }
         }
         stage ('Build Image') {
-            steps {               
+            steps {
                 script {
-                    dockerapp = docker.build("alebarrionovo/pedelogo-catalogo:${env.BUILD_ID}",
-                        '-f ./src/PedeLogo.Catalogo.Api/Dockerfile .')                                          
-                }                
+                    dockerapp = docker.build("alebarrionovo/pedelogo-catalogo:${env.BUILD_ID}", 
+                        '-f src/PedeLogo.Catalogo.Api/Dockerfile .')
+                }
             }
         }
         stage ('Push Image') {
@@ -24,17 +24,23 @@ pipeline {
                     } 
                 }
             }
-        }      
-        stage('Deploy') {
-            steps {
-                script {
-                    kubernetesDeploy(
-                        sh 'cat ./src/PedeLogo.Catalogo.Api/k8s/mongodb/deployment.yaml'
-                        kubeconfigId: 'kube', // ID do Kubeconfig armazenado no Jenkins
-                        configs: './src/PedeLogo.Catalogo.Api/k8s/mongodb/**', // Caminho para os arquivos YAML do Kubernetes                        
-                    )
-                }
-            }       
         }
+        stage ('Deploy Kubernetes') {
+            agent {
+                kubernetes {
+                    cloud 'kubernetes'
+                }
+            }
+            enviroment {
+                tag_version = "${env.BUILD_ID}"
+            }
+            steps {             
+                script {
+                    sh 'sed -i "s/{{TAG}}/$tag_version/g" src/PedeLogo.Catalogo.Api/k8s/deployment.yaml'
+                    sh 'cat src/PedeLogo.Catalogo.Api/k8s/deployment.yaml'
+                    kubernetesDeploy(configs: '**k8s/**', kubeconfigId: 'kube')
+                    } 
+                }
+        }        
     }
 }

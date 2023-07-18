@@ -36,8 +36,8 @@ pipeline {
             }
             steps {             
                 script {
-                    sh 'sed -i "s/{{TAG}}/$tag_version/g" src/PedeLogo.Catalogo.Api/k8s/api/deployment.yaml'
-                    sh 'cat src/PedeLogo.Catalogo.Api/k8s/api/deployment.yaml'
+                    //sh 'sed -i "s/{{TAG}}/$tag_version/g" src/PedeLogo.Catalogo.Api/k8s/api/deployment.yaml'
+                    sh 'cat src/PedeLogo.Catalogo.Api/mongodb/api/deployment.yaml'
                     kubernetesDeploy(configs: '**k8s/**', kubeconfigId: 'kube')
                     } 
                 }

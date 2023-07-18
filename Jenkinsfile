@@ -29,7 +29,7 @@ pipeline {
             steps {
                 script {
                     kubernetesDeploy(
-                         sh 'cat ./src/PedeLogo.Catalogo.Api/k8s/mongodb/deployment.yaml'
+                        sh 'cat ./src/PedeLogo.Catalogo.Api/k8s/mongodb/deployment.yaml'
                         kubeconfigId: 'kube', // ID do Kubeconfig armazenado no Jenkins
                         configs: './src/PedeLogo.Catalogo.Api/k8s/mongodb/**', // Caminho para os arquivos YAML do Kubernetes                        
                     )

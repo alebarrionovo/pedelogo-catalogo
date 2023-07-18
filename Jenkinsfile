@@ -9,9 +9,11 @@ pipeline {
         }
         stage ('Build Image') {
             steps {
-                script {
-                     dockerapp = docker.build("alebarrionovo/pedelogo-catalogo:${env.BUILD_ID}", 
-                        '-f ./src/Pedelogo.Catalogo.Api/Dockerfile .')                  
+                sudo {
+                    script {
+                        dockerapp = docker.build("alebarrionovo/pedelogo-catalogo:${env.BUILD_ID}", 
+                            '-f ./src/Pedelogo.Catalogo.Api/Dockerfile .')                  
+                    }
                 }
             }
         }

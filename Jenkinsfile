@@ -24,7 +24,7 @@ pipeline {
                     } 
                 }
             }
-        }
+        }      
         stage ('Deploy Kubernetes') {
             agent {
                 kubernetes {
@@ -37,10 +37,10 @@ pipeline {
             steps {             
                 script {
                     sh 'cat ./src/PedeLogo.Catalogo.Api/k8s/mongodb/deployment.yaml'
-                    kubernetesDeploy(configs: '**/k8s/mongodb**', kubeconfigId: 'kubeconfig')
+                    kubernetesDeploy(configs: '**/k8s/mongodb**', kubeconfigId: 'kube')
                     sh 'sed -i "s/{{TAG}}/$tag_version/g" ./src/PedeLogo.Catalogo.Api/k8s/api/deployment.yaml'
                     sh 'cat ./src/PedeLogo.Catalogo.Api/k8s/api/deployment.yaml'
-                    kubernetesDeploy(configs: '**/k8s/api**', kubeconfigId: 'kubeconfig')
+                    kubernetesDeploy(configs: '**/k8s/api**', kubeconfigId: 'kube')
                     } 
                 }
         }        

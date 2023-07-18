@@ -25,24 +25,16 @@ pipeline {
                 }
             }
         }      
-        stage ('Deploy Kubernetes') {
-            agent {
-                kubernetes {
-                    cloud 'kubernetes'
-                }
-            }
-            environment {
-                tag_version = "${env.BUILD_ID}"
-            }
-            steps {             
+        stage('Deploy') {
+            steps {
                 script {
-                    sh 'cat ./src/PedeLogo.Catalogo.Api/k8s/mongodb/deployment.yaml'
-                    kubernetesDeploy(configs: '**/k8s/mongodb**', kubeconfigId: 'kube')
-                    sh 'sed -i "s/{{TAG}}/$tag_version/g" ./src/PedeLogo.Catalogo.Api/k8s/api/deployment.yaml'
-                    sh 'cat ./src/PedeLogo.Catalogo.Api/k8s/api/deployment.yaml'
-                    kubernetesDeploy(configs: '**/k8s/api**', kubeconfigId: 'kube')
-                    } 
+                    kubernetesDeploy(
+                         sh 'cat ./src/PedeLogo.Catalogo.Api/k8s/mongodb/deployment.yaml'
+                        kubeconfigId: 'kube', // ID do Kubeconfig armazenado no Jenkins
+                        configs: './src/PedeLogo.Catalogo.Api/k8s/mongodb/**', // Caminho para os arquivos YAML do Kubernetes                        
+                    )
                 }
-        }        
+            }       
+        }
     }
 }

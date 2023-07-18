@@ -11,7 +11,7 @@ pipeline {
             steps {
                 script {
                      dockerapp = docker.build("alebarrionovo/pedelogo-catalogo:${env.BUILD_ID}", 
-                        '-f Dockerfile .')                  
+                        '-f ./src/Pedelogo.Catalogo.Api/Dockerfile .')                  
                 }
             }
         }

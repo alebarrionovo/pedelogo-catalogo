@@ -1,5 +1,5 @@
 FROM alebarrionovo/pedelogo-catalogo:v1.0.0
-WORKDIR /src/PedeLogo.Catalogo.Api
+WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 COPY . .

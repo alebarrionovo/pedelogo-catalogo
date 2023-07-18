@@ -8,13 +8,11 @@ pipeline {
             }
         }
         stage ('Build Image') {
-            steps {
-                sudo {
-                    script {
-                        dockerapp = docker.build("alebarrionovo/pedelogo-catalogo:${env.BUILD_ID}", 
-                            '-f ./src/Pedelogo.Catalogo.Api/Dockerfile .')                  
-                    }
-                }
+            steps {               
+                script {
+                    dockerapp = docker.build("alebarrionovo/pedelogo-catalogo:${env.BUILD_ID}", 
+                        '-f ./src/Pedelogo.Catalogo.Api/Dockerfile .')                  
+                }                
             }
         }
         stage ('Push Image') {

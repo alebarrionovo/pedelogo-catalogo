@@ -27,7 +27,7 @@ pipeline {
         }
         stage('Kubectl Apply') {
             environment {
-               KUBECONFIG = "/Users/alexandre/.kube/config" // Caminho para o arquivo kubeconfig com as credenciais do cluster Kubernetes
+               KUBECONFIG = "/home/ubuntu/.kube/config" // Caminho para o arquivo kubeconfig com as credenciais do cluster Kubernetes
             }
             steps {
                 script {

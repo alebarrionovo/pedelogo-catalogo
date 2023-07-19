@@ -25,10 +25,17 @@ pipeline {
                 }
             }
         }
-        node {
-            stage('Apply Kubernetes files') {
-                withKubeConfig([credentialsId: 'kube', serverUrl: 'https://api.k8s.192.168.64.2']) {
-                sh 'kubectl apply -f src/PedeLogo.Catalogo.Api/k8s/mongodb/deployment.yaml'
+        stage('Kubectl Apply') {
+            environment {
+               KUBECONFIG = "/Users/alexandre/.kube/config" // Caminho para o arquivo kubeconfig com as credenciais do cluster Kubernetes
+            }
+            steps {
+                script {
+                    // Faça o download do kubectl no Jenkins usando o plugin "Kubernetes CLI"
+                    def kubectl = tool 'kubectl'
+                    
+                    // Execute o comando kubectl apply usando o arquivo deployment.yaml
+                    sh "${kubectl} kubectl apply -f src/PedeLogo.Catalogo.Api/k8s/mongodb/deployment.yaml --kubeconfig=${KUBECONFIG}"
                 }
             }
         }

@@ -25,7 +25,7 @@ pipeline {
                 }
             }
         }
-        stage('Kubectl Apply') {
+        stage('Deploy Kubernetes') {
             environment {
                // Variavel KUBECONFIG com o caminho para o arquivo kubeconfig com as credenciais do cluster Kubernetes dentro da maquina do jenkins
                KUBECONFIG = "/home/ubuntu/.kube/config" 
@@ -34,12 +34,14 @@ pipeline {
             }
             steps {
                 script {                                   
-                    // Execute o comando kubectl apply passando o caminho do mongodb como todos yamls utiliznado o variavel kubeconfig
+                    // Execute o comando kubectl apply passando o caminho do mongodb como todos yamls utilizando o variavel kubeconfig
                     sh 'kubectl apply -f src/PedeLogo.Catalogo.Api/k8s/mongodb/ --kubeconfig=${KUBECONFIG}'
-                    sh 'sed -i "s/{{TAG}}/$tag_version/g" src/PedeLogo.Catalogo.Api/k8s/api/deployment.yaml'
-                    sh 'cat src/PedeLogo.Catalogo.Api/k8s/api/deployment.yaml'
-                    // Execute o comando kubectl apply passando o caminho do api como todos yamls utiliznado o variavel kubeconfig
-                    sh 'kubectl apply -f src/PedeLogo.Catalogo.Api/k8s/api/deployment.yaml --kubeconfig=${KUBECONFIG}'
+                    // Execute o comando kubectl apply passando o caminho da api menos o deployment, utilizando o variavel kubeconfig
+                    sh 'kubectl apply -f src/PedeLogo.Catalogo.Api/k8s/api/ --kubeconfig=${KUBECONFIG}'
+                    // Colocar o codigo do build na varivel tag, alterando o deployment da api
+                    sh 'sed -i "s/{{TAG}}/$tag_version/g" src/PedeLogo.Catalogo.Api/k8s/api/deployment/deployment.yaml'
+                    // Execute o comando kubectl apply passando o caminho do deployment da api após alteração da variavel tag, utilizando o variavel kubeconfig
+                    sh 'kubectl apply -f src/PedeLogo.Catalogo.Api/k8s/api/deployment/deployment.yaml --kubeconfig=${KUBECONFIG}'
                 }
             }
         }

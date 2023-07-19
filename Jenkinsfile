@@ -27,15 +27,16 @@ pipeline {
         }
         stage('Kubectl Apply') {
             environment {
-               KUBECONFIG = "/home/ubuntu/.kube/config" // Caminho para o arquivo kubeconfig com as credenciais do cluster Kubernetes
+               // Variavel KUBECONFIG com o caminho para o arquivo kubeconfig com as credenciais do cluster Kubernetes dentro da maquina do jenkins
+               KUBECONFIG = "/home/ubuntu/.kube/config" 
             }
             steps {
-                script {
-                    // Faça o download do kubectl no Jenkins usando o plugin "Kubernetes CLI"
-                    //def kubectl = tool 'kubectl'
-                    
-                    // Execute o comando kubectl apply usando o arquivo deployment.yaml
+                script {                                   
+                    // Execute o comando kubectl apply passando o caminho do mongodb como todos yamls utiliznado o variavel kubeconfig
                     sh 'kubectl apply -f src/PedeLogo.Catalogo.Api/k8s/mongodb/ --kubeconfig=${KUBECONFIG}'
+                    sh 'sed -i "s/{{TAG}}/$tag_version/g" src/PedeLogo.Catalogo.Api/k8s/api/deployment.yaml'
+                    // Execute o comando kubectl apply passando o caminho do api como todos yamls utiliznado o variavel kubeconfig
+                    sh 'kubectl apply -f src/PedeLogo.Catalogo.Api/k8s/api/ --kubeconfig=${KUBECONFIG}'
                 }
             }
         }

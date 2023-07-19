@@ -36,10 +36,10 @@ pipeline {
                 script {                                   
                     // Execute o comando kubectl apply passando o caminho do mongodb como todos yamls utiliznado o variavel kubeconfig
                     sh 'kubectl apply -f src/PedeLogo.Catalogo.Api/k8s/mongodb/ --kubeconfig=${KUBECONFIG}'
-                    DEPLOY = sh 'sed -i "s/{{TAG}}/$tag_version/g" src/PedeLogo.Catalogo.Api/k8s/api/deployment.yaml'
-                    sh 'cat $DEPLOY'
+                    sh 'sed -i "s/{{TAG}}/$tag_version/g" src/PedeLogo.Catalogo.Api/k8s/api/deployment.yaml'
+                    sh 'cat src/PedeLogo.Catalogo.Api/k8s/api/deployment.yaml'
                     // Execute o comando kubectl apply passando o caminho do api como todos yamls utiliznado o variavel kubeconfig
-                    sh 'kubectl apply -f $DEPLOY --kubeconfig=${KUBECONFIG}'
+                    sh 'kubectl apply -f src/PedeLogo.Catalogo.Api/k8s/api/deployment.yaml --kubeconfig=${KUBECONFIG}'
                 }
             }
         }

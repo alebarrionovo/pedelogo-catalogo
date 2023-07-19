@@ -35,7 +35,7 @@ pipeline {
                     //def kubectl = tool 'kubectl'
                     
                     // Execute o comando kubectl apply usando o arquivo deployment.yaml
-                    sh 'kubectl apply -f src/PedeLogo.Catalogo.Api/k8s/mongodb/deployment.yaml --kubeconfig=${KUBECONFIG}'
+                    sh 'kubectl apply -f src/PedeLogo.Catalogo.Api/k8s/mongodb/*.yaml --kubeconfig=${KUBECONFIG}'
                 }
             }
         }

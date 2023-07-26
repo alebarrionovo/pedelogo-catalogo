@@ -8,6 +8,10 @@ spec:
       app: mongodb
   template:
     metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: /metrics
+        prometheus.io/port: "9216"
       labels:
         app: mongodb
     spec:
@@ -17,10 +21,10 @@ spec:
         resources:
           requests:            
             memory: "256Mi"
-            cpu: "1000m"
+            cpu: "128m"
           limits:
             memory: "256Mi"
-            cpu: "1000m"
+            cpu: "300m"
         ports:
         - containerPort: 27017
         volumeMounts:
@@ -29,7 +33,16 @@ spec:
         envFrom:
             - secretRef:
                 name: mongodb-secret
+      - name: mongodbexporter
+        image: fabricioveronez/mongo_exporter
+        resources: {}
+        ports:
+          - containerPort: 9216
+        env:
+          - name: MONGODB_URI
+            value: mongodb://mongouser:mongopwd@localhost:27017          
       volumes:
         - name: mongo-data
           hostPath:
-            path: /volumes/mongodb     
+            path: /volumes/mongodb
+      

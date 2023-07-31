@@ -1,0 +1,29 @@
+global:
+route:
+  receiver: Default
+  group_by: ['alertname']
+  group_wait: 15s
+  group_interval: 15s
+  repeat_interval: 1m
+
+  routes:
+  - receiver: AlertaDataBase
+    match:
+      team: mongodb
+
+  - receiver: AlertaWebAPI
+    match:
+      team: webapi
+
+receivers:
+- name: Default
+  webhook_configs:
+  - url: 'https://pruu.herokapp.com/dump/wpwebhookdefault'
+
+- name: AlertaDataBase
+  webhook_configs:
+  - url: 'https://pruu.herokapp.com/dump/wpwebhookmongodb'
+
+- name: AlertaWebAPI
+  webhook_configs:
+  - url: 'https://pruu.herokapp.com/dump/wpwebhookwebapi'
